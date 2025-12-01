@@ -1,5 +1,5 @@
 {
-  "address": "F4Cu5nYYQYJU9qdqyDcZsMbadcNeADDZTqD9AnN12DFK",
+  "address": "7FaMyGiTVdjm8dd3PxpjjCX15ibbmuE1zWVFX2PHxYUK",
   "metadata": {
     "name": "bullorbear",
     "version": "0.1.0",
@@ -32,6 +32,25 @@
         {
           "name": "round",
           "writable": true
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
         },
         {
           "name": "treasury",
@@ -79,6 +98,83 @@
       ]
     },
     {
+      "name": "bet_refund",
+      "discriminator": [
+        50,
+        253,
+        176,
+        135,
+        68,
+        62,
+        177,
+        197
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "bet",
+          "writable": true
+        },
+        {
+          "name": "user",
+          "writable": true
+        },
+        {
+          "name": "round",
+          "writable": true
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "treasury",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  101,
+                  97,
+                  115,
+                  117,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "close_bet",
       "discriminator": [
         185,
@@ -107,6 +203,25 @@
         {
           "name": "round",
           "writable": true
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
         },
         {
           "name": "treasury",
@@ -197,6 +312,24 @@
         {
           "name": "round",
           "writable": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
         }
       ],
       "args": [
@@ -244,6 +377,13 @@
           }
         },
         {
+          "name": "program_data"
+        },
+        {
+          "name": "program",
+          "address": "7FaMyGiTVdjm8dd3PxpjjCX15ibbmuE1zWVFX2PHxYUK"
+        },
+        {
           "name": "system_program",
           "address": "11111111111111111111111111111111"
         }
@@ -260,20 +400,28 @@
         {
           "name": "treasury_fee",
           "type": "u16"
+        },
+        {
+          "name": "admin",
+          "type": "pubkey"
+        },
+        {
+          "name": "operator",
+          "type": "pubkey"
         }
       ]
     },
     {
-      "name": "genesis_execute",
+      "name": "config_update",
       "discriminator": [
-        185,
-        155,
-        201,
-        180,
-        98,
-        39,
-        158,
-        118
+        80,
+        37,
+        109,
+        136,
+        82,
+        135,
+        89,
+        241
       ],
       "accounts": [
         {
@@ -299,87 +447,40 @@
               }
             ]
           }
-        },
-        {
-          "name": "round",
-          "writable": true
-        },
-        {
-          "name": "next_round",
-          "writable": true
-        },
-        {
-          "name": "future_round",
-          "writable": true
-        },
-        {
-          "name": "price_update"
-        },
-        {
-          "name": "system_program",
-          "address": "11111111111111111111111111111111"
         }
       ],
-      "args": []
-    },
-    {
-      "name": "genesis_lock",
-      "discriminator": [
-        58,
-        128,
-        180,
-        184,
-        194,
-        218,
-        56,
-        100
-      ],
-      "accounts": [
+      "args": [
         {
-          "name": "payer",
-          "writable": true,
-          "signer": true
-        },
-        {
-          "name": "config",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  99,
-                  111,
-                  110,
-                  102,
-                  105,
-                  103
-                ]
-              }
-            ]
+          "name": "admin",
+          "type": {
+            "option": "pubkey"
           }
         },
         {
-          "name": "round",
-          "writable": true
+          "name": "operator",
+          "type": {
+            "option": "pubkey"
+          }
         },
         {
-          "name": "next_round",
-          "writable": true
+          "name": "interval_seconds",
+          "type": {
+            "option": "u16"
+          }
         },
         {
-          "name": "future_round",
-          "writable": true
+          "name": "min_bet_amount",
+          "type": {
+            "option": "u64"
+          }
         },
         {
-          "name": "price_update"
-        },
-        {
-          "name": "system_program",
-          "address": "11111111111111111111111111111111"
+          "name": "treasury_fee",
+          "type": {
+            "option": "u16"
+          }
         }
-      ],
-      "args": []
+      ]
     },
     {
       "name": "initialize",
@@ -431,16 +532,7 @@
           "address": "11111111111111111111111111111111"
         }
       ],
-      "args": [
-        {
-          "name": "interval",
-          "type": "u16"
-        },
-        {
-          "name": "_epoch",
-          "type": "u64"
-        }
-      ]
+      "args": []
     },
     {
       "name": "pause",
@@ -478,6 +570,180 @@
               }
             ]
           }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "round_add_future",
+      "discriminator": [
+        73,
+        13,
+        63,
+        100,
+        105,
+        106,
+        124,
+        23
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "last_available_round",
+          "writable": true
+        },
+        {
+          "name": "future_round",
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "round_execute",
+      "discriminator": [
+        45,
+        21,
+        191,
+        6,
+        192,
+        5,
+        11,
+        134
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "round",
+          "writable": true
+        },
+        {
+          "name": "next_round",
+          "writable": true
+        },
+        {
+          "name": "last_available_round",
+          "writable": true
+        },
+        {
+          "name": "future_round",
+          "writable": true
+        },
+        {
+          "name": "price_update"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "round_lock",
+      "discriminator": [
+        220,
+        60,
+        236,
+        217,
+        40,
+        15,
+        28,
+        10
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "round",
+          "writable": true
+        },
+        {
+          "name": "last_available_round",
+          "writable": true
+        },
+        {
+          "name": "future_round",
+          "writable": true
+        },
+        {
+          "name": "price_update"
         },
         {
           "name": "system_program",
@@ -683,16 +949,16 @@
       ]
     },
     {
-      "name": "GenesisInitialized",
+      "name": "Initialized",
       "discriminator": [
-        41,
-        79,
-        39,
-        224,
-        64,
-        195,
-        0,
-        233
+        208,
+        213,
+        115,
+        98,
+        115,
+        82,
+        201,
+        209
       ]
     },
     {
@@ -849,6 +1115,56 @@
       "code": 6014,
       "name": "InsufficientTreasuryFunds",
       "msg": "Insufficient treasury funds"
+    },
+    {
+      "code": 6015,
+      "name": "GamePaused",
+      "msg": "Game is paused"
+    },
+    {
+      "code": 6016,
+      "name": "RefundNotYetAvailable",
+      "msg": "Refund not yet available"
+    },
+    {
+      "code": 6017,
+      "name": "PriceTimestampMismatch",
+      "msg": "Price timestamp not within 1 second window"
+    },
+    {
+      "code": 6018,
+      "name": "InvalidAdminOrOperator",
+      "msg": "Invalid admin or operator configuration"
+    },
+    {
+      "code": 6019,
+      "name": "InvalidAccountOwner",
+      "msg": "Invalid account owner"
+    },
+    {
+      "code": 6020,
+      "name": "InvalidAccountSize",
+      "msg": "Invalid account size"
+    },
+    {
+      "code": 6021,
+      "name": "InsufficientAccountData",
+      "msg": "Insufficient account data"
+    },
+    {
+      "code": 6022,
+      "name": "BetSerializationFailed",
+      "msg": "Bet serialization failed"
+    },
+    {
+      "code": 6023,
+      "name": "BetVerificationFailed",
+      "msg": "Bet verification failed"
+    },
+    {
+      "code": 6024,
+      "name": "InvalidDiscriminator",
+      "msg": "Invalid discriminator"
     }
   ],
   "types": [
@@ -876,10 +1192,6 @@
           {
             "name": "amount",
             "type": "u64"
-          },
-          {
-            "name": "claimed",
-            "type": "bool"
           }
         ]
       }
@@ -958,8 +1270,8 @@
             }
           },
           {
-            "name": "payout_ratio",
-            "type": "f64"
+            "name": "payout_ratio_bps",
+            "type": "u64"
           }
         ]
       }
@@ -978,11 +1290,11 @@
             "type": "pubkey"
           },
           {
-            "name": "genesis_lock_once",
+            "name": "locked_once",
             "type": "bool"
           },
           {
-            "name": "genesis_initialized",
+            "name": "paused",
             "type": "bool"
           },
           {
@@ -1002,6 +1314,10 @@
             "type": "u64"
           },
           {
+            "name": "pending_bet_amount",
+            "type": "u64"
+          },
+          {
             "name": "current_epoch",
             "type": "u64"
           },
@@ -1013,7 +1329,7 @@
       }
     },
     {
-      "name": "GenesisInitialized",
+      "name": "Initialized",
       "type": {
         "kind": "struct",
         "fields": [
@@ -1213,19 +1529,27 @@
           },
           {
             "name": "lock_price",
-            "type": "i64"
+            "type": {
+              "option": "i64"
+            }
           },
           {
             "name": "lock_price_exponent",
-            "type": "i32"
+            "type": {
+              "option": "i32"
+            }
           },
           {
             "name": "close_price",
-            "type": "i64"
+            "type": {
+              "option": "i64"
+            }
           },
           {
             "name": "close_price_exponent",
-            "type": "i32"
+            "type": {
+              "option": "i32"
+            }
           },
           {
             "name": "total_amount",

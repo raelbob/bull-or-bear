@@ -3,9 +3,13 @@
 target/debug
 target/deploy
 target/release
+target/flycheck0
+target/flycheck1
 target/sbf-solana-solana
 target/test-ledger
 target/.rustc_info.json
+target/CACHEDIR.TAG
+target/sbpf-solana-solana/
 **/*.rs.bk
 node_modules
 test-ledger

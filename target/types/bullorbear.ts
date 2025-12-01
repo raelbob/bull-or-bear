@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/bullorbear.json`.
  */
 export type Bullorbear = {
-  "address": "F4Cu5nYYQYJU9qdqyDcZsMbadcNeADDZTqD9AnN12DFK",
+  "address": "7FaMyGiTVdjm8dd3PxpjjCX15ibbmuE1zWVFX2PHxYUK",
   "metadata": {
     "name": "bullorbear",
     "version": "0.1.0",
@@ -38,6 +38,25 @@ export type Bullorbear = {
         {
           "name": "round",
           "writable": true
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
         },
         {
           "name": "treasury",
@@ -85,6 +104,83 @@ export type Bullorbear = {
       ]
     },
     {
+      "name": "betRefund",
+      "discriminator": [
+        50,
+        253,
+        176,
+        135,
+        68,
+        62,
+        177,
+        197
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "bet",
+          "writable": true
+        },
+        {
+          "name": "user",
+          "writable": true
+        },
+        {
+          "name": "round",
+          "writable": true
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "treasury",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  101,
+                  97,
+                  115,
+                  117,
+                  114,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "closeBet",
       "discriminator": [
         185,
@@ -113,6 +209,25 @@ export type Bullorbear = {
         {
           "name": "round",
           "writable": true
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
         },
         {
           "name": "treasury",
@@ -203,6 +318,24 @@ export type Bullorbear = {
         {
           "name": "round",
           "writable": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
         }
       ],
       "args": [
@@ -250,6 +383,13 @@ export type Bullorbear = {
           }
         },
         {
+          "name": "programData"
+        },
+        {
+          "name": "program",
+          "address": "7FaMyGiTVdjm8dd3PxpjjCX15ibbmuE1zWVFX2PHxYUK"
+        },
+        {
           "name": "systemProgram",
           "address": "11111111111111111111111111111111"
         }
@@ -266,20 +406,28 @@ export type Bullorbear = {
         {
           "name": "treasuryFee",
           "type": "u16"
+        },
+        {
+          "name": "admin",
+          "type": "pubkey"
+        },
+        {
+          "name": "operator",
+          "type": "pubkey"
         }
       ]
     },
     {
-      "name": "genesisExecute",
+      "name": "configUpdate",
       "discriminator": [
-        185,
-        155,
-        201,
-        180,
-        98,
-        39,
-        158,
-        118
+        80,
+        37,
+        109,
+        136,
+        82,
+        135,
+        89,
+        241
       ],
       "accounts": [
         {
@@ -305,87 +453,40 @@ export type Bullorbear = {
               }
             ]
           }
-        },
-        {
-          "name": "round",
-          "writable": true
-        },
-        {
-          "name": "nextRound",
-          "writable": true
-        },
-        {
-          "name": "futureRound",
-          "writable": true
-        },
-        {
-          "name": "priceUpdate"
-        },
-        {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
         }
       ],
-      "args": []
-    },
-    {
-      "name": "genesisLock",
-      "discriminator": [
-        58,
-        128,
-        180,
-        184,
-        194,
-        218,
-        56,
-        100
-      ],
-      "accounts": [
+      "args": [
         {
-          "name": "payer",
-          "writable": true,
-          "signer": true
-        },
-        {
-          "name": "config",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  99,
-                  111,
-                  110,
-                  102,
-                  105,
-                  103
-                ]
-              }
-            ]
+          "name": "admin",
+          "type": {
+            "option": "pubkey"
           }
         },
         {
-          "name": "round",
-          "writable": true
+          "name": "operator",
+          "type": {
+            "option": "pubkey"
+          }
         },
         {
-          "name": "nextRound",
-          "writable": true
+          "name": "intervalSeconds",
+          "type": {
+            "option": "u16"
+          }
         },
         {
-          "name": "futureRound",
-          "writable": true
+          "name": "minBetAmount",
+          "type": {
+            "option": "u64"
+          }
         },
         {
-          "name": "priceUpdate"
-        },
-        {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
+          "name": "treasuryFee",
+          "type": {
+            "option": "u16"
+          }
         }
-      ],
-      "args": []
+      ]
     },
     {
       "name": "initialize",
@@ -437,16 +538,7 @@ export type Bullorbear = {
           "address": "11111111111111111111111111111111"
         }
       ],
-      "args": [
-        {
-          "name": "interval",
-          "type": "u16"
-        },
-        {
-          "name": "epoch",
-          "type": "u64"
-        }
-      ]
+      "args": []
     },
     {
       "name": "pause",
@@ -484,6 +576,180 @@ export type Bullorbear = {
               }
             ]
           }
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "roundAddFuture",
+      "discriminator": [
+        73,
+        13,
+        63,
+        100,
+        105,
+        106,
+        124,
+        23
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "lastAvailableRound",
+          "writable": true
+        },
+        {
+          "name": "futureRound",
+          "writable": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "roundExecute",
+      "discriminator": [
+        45,
+        21,
+        191,
+        6,
+        192,
+        5,
+        11,
+        134
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "round",
+          "writable": true
+        },
+        {
+          "name": "nextRound",
+          "writable": true
+        },
+        {
+          "name": "lastAvailableRound",
+          "writable": true
+        },
+        {
+          "name": "futureRound",
+          "writable": true
+        },
+        {
+          "name": "priceUpdate"
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "roundLock",
+      "discriminator": [
+        220,
+        60,
+        236,
+        217,
+        40,
+        15,
+        28,
+        10
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "round",
+          "writable": true
+        },
+        {
+          "name": "lastAvailableRound",
+          "writable": true
+        },
+        {
+          "name": "futureRound",
+          "writable": true
+        },
+        {
+          "name": "priceUpdate"
         },
         {
           "name": "systemProgram",
@@ -689,16 +955,16 @@ export type Bullorbear = {
       ]
     },
     {
-      "name": "genesisInitialized",
+      "name": "initialized",
       "discriminator": [
-        41,
-        79,
-        39,
-        224,
-        64,
-        195,
-        0,
-        233
+        208,
+        213,
+        115,
+        98,
+        115,
+        82,
+        201,
+        209
       ]
     },
     {
@@ -855,6 +1121,56 @@ export type Bullorbear = {
       "code": 6014,
       "name": "insufficientTreasuryFunds",
       "msg": "Insufficient treasury funds"
+    },
+    {
+      "code": 6015,
+      "name": "gamePaused",
+      "msg": "Game is paused"
+    },
+    {
+      "code": 6016,
+      "name": "refundNotYetAvailable",
+      "msg": "Refund not yet available"
+    },
+    {
+      "code": 6017,
+      "name": "priceTimestampMismatch",
+      "msg": "Price timestamp not within 1 second window"
+    },
+    {
+      "code": 6018,
+      "name": "invalidAdminOrOperator",
+      "msg": "Invalid admin or operator configuration"
+    },
+    {
+      "code": 6019,
+      "name": "invalidAccountOwner",
+      "msg": "Invalid account owner"
+    },
+    {
+      "code": 6020,
+      "name": "invalidAccountSize",
+      "msg": "Invalid account size"
+    },
+    {
+      "code": 6021,
+      "name": "insufficientAccountData",
+      "msg": "Insufficient account data"
+    },
+    {
+      "code": 6022,
+      "name": "betSerializationFailed",
+      "msg": "Bet serialization failed"
+    },
+    {
+      "code": 6023,
+      "name": "betVerificationFailed",
+      "msg": "Bet verification failed"
+    },
+    {
+      "code": 6024,
+      "name": "invalidDiscriminator",
+      "msg": "Invalid discriminator"
     }
   ],
   "types": [
@@ -882,10 +1198,6 @@ export type Bullorbear = {
           {
             "name": "amount",
             "type": "u64"
-          },
-          {
-            "name": "claimed",
-            "type": "bool"
           }
         ]
       }
@@ -964,8 +1276,8 @@ export type Bullorbear = {
             }
           },
           {
-            "name": "payoutRatio",
-            "type": "f64"
+            "name": "payoutRatioBps",
+            "type": "u64"
           }
         ]
       }
@@ -984,11 +1296,11 @@ export type Bullorbear = {
             "type": "pubkey"
           },
           {
-            "name": "genesisLockOnce",
+            "name": "lockedOnce",
             "type": "bool"
           },
           {
-            "name": "genesisInitialized",
+            "name": "paused",
             "type": "bool"
           },
           {
@@ -1008,6 +1320,10 @@ export type Bullorbear = {
             "type": "u64"
           },
           {
+            "name": "pendingBetAmount",
+            "type": "u64"
+          },
+          {
             "name": "currentEpoch",
             "type": "u64"
           },
@@ -1019,7 +1335,7 @@ export type Bullorbear = {
       }
     },
     {
-      "name": "genesisInitialized",
+      "name": "initialized",
       "type": {
         "kind": "struct",
         "fields": [
@@ -1219,19 +1535,27 @@ export type Bullorbear = {
           },
           {
             "name": "lockPrice",
-            "type": "i64"
+            "type": {
+              "option": "i64"
+            }
           },
           {
             "name": "lockPriceExponent",
-            "type": "i32"
+            "type": {
+              "option": "i32"
+            }
           },
           {
             "name": "closePrice",
-            "type": "i64"
+            "type": {
+              "option": "i64"
+            }
           },
           {
             "name": "closePriceExponent",
-            "type": "i32"
+            "type": {
+              "option": "i32"
+            }
           },
           {
             "name": "totalAmount",
