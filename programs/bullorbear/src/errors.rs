@@ -32,4 +32,24 @@ pub enum ErrorCode {
     UnresolvedBetsExist,
     #[msg("Insufficient treasury funds")]
     InsufficientTreasuryFunds,
+    #[msg("Game is paused")]
+    GamePaused,
+    #[msg("Refund not yet available")]
+    RefundNotYetAvailable,
+    #[msg("Price timestamp not within 1 second window")]
+    PriceTimestampMismatch,
+    #[msg("Invalid admin or operator configuration")]
+    InvalidAdminOrOperator,
+    #[msg("Invalid account owner")]
+    InvalidAccountOwner,
+    #[msg("Invalid account size")]
+    InvalidAccountSize,
+    #[msg("Insufficient account data")]
+    InsufficientAccountData,
+    #[msg("Bet serialization failed")]
+    BetSerializationFailed,
+    #[msg("Bet verification failed")]
+    BetVerificationFailed,
+    #[msg("Invalid discriminator")]
+    InvalidDiscriminator,
 }

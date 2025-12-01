@@ -2,8 +2,8 @@ use crate::state::{Bet, Config, Round};
 use anchor_lang::prelude::*;
 use pyth_solana_receiver_sdk::price_update::PriceUpdateV2;
 
-#[derive(Accounts, Debug)]
-pub struct ConfigInitialize<'info> {
+#[derive(Accounts)]
+pub struct ConfigInitializeContext<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
 
@@ -16,11 +16,34 @@ pub struct ConfigInitialize<'info> {
     )]
     pub config: Account<'info, Config>,
 
+    // CHECK: Program's upgrade authority
+    #[account(
+        constraint = program_data.upgrade_authority_address == Some(payer.key()) 
+        @ crate::errors::ErrorCode::UnauthorizedOperator
+    )]
+    pub program_data: Account<'info, ProgramData>,
+
+    #[account(address = crate::ID)]
+    pub program: Program<'info, crate::program::Bullorbear>,
+
     pub system_program: Program<'info, System>,
 }
 
 #[derive(Accounts)]
-pub struct CloseConfig<'info> {
+pub struct UpdateConfigContext<'info> {
+    #[account(mut)]
+    pub payer: Signer<'info>,
+
+    #[account(
+        mut,
+        seeds = [b"config"],
+        bump
+    )]
+    pub config: Account<'info, Config>,
+}
+
+#[derive(Accounts)]
+pub struct CloseConfigContext<'info> {
     #[account(
         mut,
         seeds = [b"config"],
@@ -34,8 +57,7 @@ pub struct CloseConfig<'info> {
 }
 
 #[derive(Accounts, Debug)]
-#[instruction(interval:u16, epoch:u64)]
-pub struct GenesisInitialize<'info> {
+pub struct InitializeContext<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
 
@@ -50,7 +72,7 @@ pub struct GenesisInitialize<'info> {
         init,
         payer = payer,
         space = 8 + Round::INIT_SPACE,
-        seeds = [b"round", &epoch.to_le_bytes()[..]],
+        seeds = [b"round", &(if config.last_available_epoch == 0 { config.current_epoch } else { config.last_available_epoch + 1 }).to_le_bytes()[..]],
         bump
     )]
     pub round: Account<'info, Round>,
@@ -59,7 +81,7 @@ pub struct GenesisInitialize<'info> {
         init,
         payer = payer,
         space = 8 + Round::INIT_SPACE,
-        seeds = [b"round", &(epoch + 1).to_le_bytes()[..]],
+        seeds = [b"round", &(if config.last_available_epoch == 0 { config.current_epoch + 1 } else { config.last_available_epoch + 2 }).to_le_bytes()[..]],
         bump
     )]
     pub next_round: Account<'info, Round>,
@@ -93,6 +115,54 @@ pub struct CloseBetContext<'info> {
 
     #[account(
         mut,
+        seeds = [b"config"],
+        bump
+    )]
+    pub config: Account<'info, Config>,
+
+    #[account(
+        mut,
+        seeds = [b"treasury"],
+        bump
+    )]
+    pub treasury: SystemAccount<'info>,
+
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts, Debug)]
+pub struct BetRefundContext<'info> {
+    #[account(mut)]
+    pub payer: Signer<'info>,
+
+    #[account(
+        mut,
+        seeds = [b"bet", &user.key().to_bytes()[..], &round.epoch.to_le_bytes()[..]],
+        bump,
+        close = treasury
+    )]
+    pub bet: Account<'info, Bet>,
+
+    /// CHECK: We check this account matches bet.user, so it's safe.
+    #[account(mut, address = bet.user)]
+    pub user: AccountInfo<'info>,
+
+    #[account(
+        mut,
+        seeds = [b"round", &bet.epoch.to_le_bytes()[..]],
+        bump
+    )]
+    pub round: Account<'info, Round>,
+
+    #[account(
+        mut,
+        seeds = [b"config"],
+        bump
+    )]
+    pub config: Account<'info, Config>,
+
+    #[account(
+        mut,
         seeds = [b"treasury"],
         bump
     )]
@@ -117,7 +187,7 @@ pub struct PauseContext<'info> {
 }
 
 #[derive(Accounts)]
-pub struct GenesisLockContext<'info> {
+pub struct LockRoundContext<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
 
@@ -137,16 +207,16 @@ pub struct GenesisLockContext<'info> {
 
     #[account(
         mut,
-        seeds = [b"round", &(config.current_epoch + 1).to_le_bytes()[..]],
+        seeds = [b"round", &(config.last_available_epoch).to_le_bytes()[..]],
         bump
     )]
-    pub next_round: Account<'info, Round>,
+    pub last_available_round: Account<'info, Round>,
 
     #[account(
         init,
         payer = payer,
         space = 8 + Round::INIT_SPACE,
-        seeds = [b"round", &(config.current_epoch + 2).to_le_bytes()[..]],
+        seeds = [b"round", &(config.last_available_epoch + 1).to_le_bytes()[..]],
         bump
     )]
     pub future_round: Account<'info, Round>,
@@ -183,15 +253,53 @@ pub struct ExecuteRoundContext<'info> {
     pub next_round: Account<'info, Round>,
 
     #[account(
+        mut,
+        seeds = [b"round", &(config.last_available_epoch).to_le_bytes()[..]],
+        bump
+    )]
+    pub last_available_round: Account<'info, Round>,
+
+    #[account(
         init,
         payer = payer,
         space = 8 + Round::INIT_SPACE,
-        seeds = [b"round", &(config.current_epoch + 3).to_le_bytes()[..]],
+        seeds = [b"round", &(config.last_available_epoch + 1).to_le_bytes()[..]],
         bump
     )]
     pub future_round: Account<'info, Round>,
 
     pub price_update: Account<'info, PriceUpdateV2>,
+
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct AddFutureRoundContext<'info> {
+    #[account(mut)]
+    pub payer: Signer<'info>,
+
+    #[account(
+        mut,
+        seeds = [b"config"],
+        bump
+    )]
+    pub config: Account<'info, Config>,
+
+    #[account(
+        mut,
+        seeds = [b"round", &config.last_available_epoch.to_le_bytes()[..]],
+        bump
+    )]
+    pub last_available_round: Account<'info, Round>,
+
+    #[account(
+        init,
+        payer = payer,
+        space = 8 + Round::INIT_SPACE,
+        seeds = [b"round", &(config.last_available_epoch + 1).to_le_bytes()[..]],
+        bump
+    )]
+    pub future_round: Account<'info, Round>,
 
     pub system_program: Program<'info, System>,
 }
@@ -204,11 +312,17 @@ pub struct CloseRoundContext<'info> {
 
     #[account(
         mut,
-        close = destination, // close account and return lamports to payer
+        close = destination,
         seeds = [b"round", &epoch.to_le_bytes()[..]],
         bump
     )]
     pub round: Account<'info, Round>,
+
+    #[account(
+        seeds = [b"config"],
+        bump
+    )]
+    pub config: Account<'info, Config>,
 }
 
 #[derive(Accounts)]
@@ -231,6 +345,13 @@ pub struct BetContext<'info> {
         bump
     )]
     pub round: Account<'info, Round>,
+
+    #[account(
+        mut,
+        seeds = [b"config"],
+        bump
+    )]
+    pub config: Account<'info, Config>,
 
     #[account(
         mut,

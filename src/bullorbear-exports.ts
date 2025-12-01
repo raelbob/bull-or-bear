@@ -31,7 +31,7 @@ export type UserBet = IdlAccounts<Bullorbear>['bet'];
 export type RoundInitializedEvent = IdlEvents<Bullorbear>['roundInitialized'];
 export type RoundStartedEvent = IdlEvents<Bullorbear>['roundStarted'];
 export type RoundClosedEvent = IdlEvents<Bullorbear>['roundClosed'];
-export type GenesisInitializedEvent = IdlEvents<Bullorbear>['genesisInitialized'];
+export type InitializedEvent = IdlEvents<Bullorbear>['initialized'];
 export type BetEvent = IdlEvents<Bullorbear>['betEvent'];
 export type ClaimEvent = IdlEvents<Bullorbear>['claim'];
 
@@ -58,7 +58,7 @@ export function getBullorbearProgramId(cluster: Cluster) {
     case 'devnet':
     case 'testnet':
       // This is the program ID for the Bullorbear program on devnet and testnet.
-      return new PublicKey('F4Cu5nYYQYJU9qdqyDcZsMbadcNeADDZTqD9AnN12DFK')
+      return new PublicKey('DLEQCwxqxavJUK93bpdqXGkqJSmwJTmL2vnXRTPYNUau')
     case 'mainnet-beta':
     default:
       return BULLORBEAR_PROGRAM_ID

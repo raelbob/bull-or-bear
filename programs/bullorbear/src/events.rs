@@ -2,7 +2,7 @@ use crate::state::Position;
 use anchor_lang::prelude::*;
 
 #[event]
-pub struct GenesisInitialized {
+pub struct Initialized {
     pub interval: u16,
     pub epoch: u64,
     pub lock_ts: i64,
@@ -72,5 +72,5 @@ pub struct Claim {
     pub epoch: u64,
     pub amount: u64,
     pub winning_position: Position,
-    pub payout_ratio: f64,
+    pub payout_ratio_bps: u64,
 }

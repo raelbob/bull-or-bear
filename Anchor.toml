@@ -6,7 +6,7 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-bullorbear = "F4Cu5nYYQYJU9qdqyDcZsMbadcNeADDZTqD9AnN12DFK"
+bullorbear = "DLEQCwxqxavJUK93bpdqXGkqJSmwJTmL2vnXRTPYNUau"
 
 [registry]
 url = "https://api.apr.dev"
